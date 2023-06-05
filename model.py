@@ -5,10 +5,12 @@ import numpy as np
 from pathlib import Path
 import base64
 from datetime import date, datetime
-
+from io import BytesIO
+from pyxlsb import open_workbook as open_xlsb
 
 from PIL import Image
 import streamlit as st
+from io import StringIO
 
 import numpy as np
 from sklearn.linear_model import LinearRegression
@@ -132,7 +134,7 @@ uploaded_files = st.file_uploader("Choose a CSV file", accept_multiple_files=Tru
 for uploaded_file in uploaded_files:
     bytes_data = uploaded_file.read()
     st.write("filename:", uploaded_file.name)
-    st.write(bytes_data)
+    #st.write(bytes_data)
 
 
 st.write("### Step 02: Select Direction of Questions ➡️")
@@ -146,11 +148,83 @@ edited_df = st.experimental_data_editor(df_questions)
 #st.write("### Step 01: Change of Scale: ")
 #st.write("transformation des notes de 1 ‡ 6 en notes de 0 ‡ 5")
 
+@st.cache_data
+def convert_df(df):
+    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+    return df.to_csv().encode('utf-8')
 
+csv_questions = convert_df(df_questions)
+
+st.download_button(
+    label="📥 Download **Questions** as csv",
+    data=csv_questions,
+    file_name='questions.csv',
+    mime='text/csv',
+)
+
+import io
+#if st.button("Download Dataset"):
+        # Set the headers to force the browser to download the file
+headers = {
+            'Content-Disposition': 'attachment; filename=dataset.xlsx',
+            'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        }
+
+        # Create a Pandas Excel writer object
+excel_writer = pd.ExcelWriter("questions2.xlsx", engine='xlsxwriter')
+df_questions.to_excel(excel_writer, index=False, sheet_name='Sheet1')
+excel_writer.close()
+
+        # Download the file
+with open("questions2.xlsx", "rb") as f:
+        st.download_button(
+                label="📥 Download **Questions** as xlsx",
+                data=f,
+                file_name="questions.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            )
 
 df_final = pd.read_excel("datasets/df_final_final.xlsx")
 df_final_v2 = df_final.loc[:, ~df_final.columns.str.contains('^Unnamed')]
 st.dataframe(df_final_v2.head(5))
+
+
+csv_final = convert_df(df_final_v2)
+
+st.download_button(
+    label="📥 Download **Final** as csv",
+    data=csv_final,
+    file_name='final.csv',
+    mime='text/csv',
+)
+
+import io
+#if st.button("Download Dataset"):
+        # Set the headers to force the browser to download the file
+headers = {
+            'Content-Disposition': 'attachment; filename=dataset.xlsx',
+            'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        }
+
+        # Create a Pandas Excel writer object
+excel_writer = pd.ExcelWriter("df_final_v2_2.xlsx", engine='xlsxwriter')
+df_final_v2.to_excel(excel_writer, index=False, sheet_name='Sheet1')
+excel_writer.close()
+
+        # Download the file
+with open("df_final_v2_2.xlsx", "rb") as f:
+        st.download_button(
+                label="📥 Download **Final** as xlsx",
+                data=f,
+                file_name="final.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            )
+
+
+
+
+
+
 
 
 
@@ -159,22 +233,64 @@ st.write(" ")
 st.write("### Step 03: Generate Simple Visuals: ")
 image_simple = Image.open('images/bar-chart.png')
 st.image(image_simple, width=80)
+
 st.write(" ")
 
 participation1 = Image.open('images/participation1.png')
 st.image(participation1, width=800)
 
+with open("images/participation1.png", "rb") as file:
+    btn = st.download_button(
+            label="Download image",
+            data=file,
+            file_name="participation1.png",
+            mime="image/png"
+          )
+
+
 participation2 = Image.open('images/participation2.png')
 st.image(participation2, width=800)
+
+with open("images/participation2.png", "rb") as file:
+    btn = st.download_button(
+            label="Download image",
+            data=file,
+            file_name="participation2.png",
+            mime="image/png"
+          )
 
 participation4 = Image.open('images/participation4.png')
 st.image(participation4, width=800)
 
+with open("images/participation4.png", "rb") as file:
+    btn = st.download_button(
+            label="Download image",
+            data=file,
+            file_name="participation4.png",
+            mime="image/png"
+          )
+
 participation5 = Image.open('images/participation5.png')
 st.image(participation5, width=800)
 
+with open("images/participation5.png", "rb") as file:
+    btn = st.download_button(
+            label="Download image",
+            data=file,
+            file_name="participation5.png",
+            mime="image/png"
+          )
+
 participation6 = Image.open('images/participation6.png')
 st.image(participation6, width=800)
+
+with open("images/participation6.png", "rb") as file:
+    btn = st.download_button(
+            label="Download image",
+            data=file,
+            file_name="participation6.png",
+            mime="image/png"
+          )
 
 
 
@@ -190,31 +306,86 @@ st.write(" ")
 stress2 = Image.open('images/stress2.png')
 st.image(stress2, width=800)
 
+
+with open("images/stress2.png", "rb") as file:
+    btn = st.download_button(
+            label="Download image",
+            data=file,
+            file_name="stress2.png",
+            mime="image/png"
+          )
+
 stress3 = Image.open('images/stress3.png')
 st.image(stress3, width=800)
+
+
+with open("images/stress3.png", "rb") as file:
+    btn = st.download_button(
+            label="Download image",
+            data=file,
+            file_name="stress3.png",
+            mime="image/png"
+          )
 
 stress4 = Image.open('images/stress4.png')
 st.image(stress4, width=800)
 
+
+
+with open("images/stress4.png", "rb") as file:
+    btn = st.download_button(
+            label="Download image",
+            data=file,
+            file_name="stress4.png",
+            mime="image/png"
+          )
+
 stress5 = Image.open('images/stress5.png')
 st.image(stress5, width=800)
+
+
+with open("images/stress5.png", "rb") as file:
+    btn = st.download_button(
+            label="Download image",
+            data=file,
+            file_name="stress5.png",
+            mime="image/png"
+          )
 
 
 stress6 = Image.open('images/stress6.png')
 st.image(stress6, width=800)
 
 
+with open("images/stress6.png", "rb") as file:
+    btn = st.download_button(
+            label="Download image",
+            data=file,
+            file_name="stress6.png",
+            mime="image/png"
+          )
+
+
 stress7 = Image.open('images/stress7.png')
 st.image(stress7, width=800)
 
 
+with open("images/stress7.png", "rb") as file:
+    btn = st.download_button(
+            label="Download image",
+            data=file,
+            file_name="stress7.png",
+            mime="image/png"
+          )
 
 
-st.write(" ")
-st.write("### Step 05: Motivational Visuals: ")
-image_motiv = Image.open('images/reward.png')
-st.image(image_motiv, width=80)
-st.write(" ")
+
+
+#st.write(" ")
+#st.write("### Step 05: Motivational Visuals: ")
+#image_motiv = Image.open('images/reward.png')
+#st.image(image_motiv, width=80)
+#st.write(" ")
 
 
 
@@ -344,29 +515,73 @@ st.dataframe(df_scores_man)
 
 
 
+csv_scores = convert_df(df_scores_man)
+
+st.download_button(
+    label="📥 Download **Scores** as csv",
+    data=csv_scores,
+    file_name='df_scores.csv',
+    mime='text/csv',
+)
+
+import io
+#if st.button("Download Dataset"):
+        # Set the headers to force the browser to download the file
+headers = {
+            'Content-Disposition': 'attachment; filename=dataset.xlsx',
+            'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        }
+
+        # Create a Pandas Excel writer object
+excel_writer = pd.ExcelWriter("df_scores_2.xlsx", engine='xlsxwriter')
+df_scores_man.to_excel(excel_writer, index=False, sheet_name='Sheet1')
+excel_writer.close()
+
+        # Download the file
+with open("df_scores_2.xlsx", "rb") as f:
+        st.download_button(
+                label="📥 Download **Scores** as xlsx",
+                data=f,
+                file_name="df_scores.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            )
+
+
+
+
+
+
 
 
 st.write(" ")
 st.write("### Step 07: Khi Square: ")
-image_edhec = Image.open('images/chalkboard.png')
-st.image(image_edhec, width=80)
+
+image_chalkboard = Image.open('images/chalkboard.png')
+st.image(image_chalkboard, width=80)
+
+st.write(" ")
+st.write("#### Stress")
+st.write(" ")
+
+
+
 st.write(" ")
 
 
 option3 = st.selectbox(
-    'Which segmentation do you want for KHI ?',
+    'Which segmentation do you want for KHI Stress?',
     ['Direction', 'Site', 'Ancienneté','Contrat','Responsabilité',"Type d'activité","Statut professionnel"])
 
-list_option4 = list(set(df_final[option3]))
-option4 = st.selectbox('Which element for KHI ?',list_option4)
+#list_option4 = list(set(df_final[option3]))
+#option4 = st.selectbox('Which element for KHI Stress?',list_option4)
 
 
 df_scores4 = df_final.copy()
-df_scores_filtered_2 = df_scores4[df_scores4[option3] == option4].reset_index(drop=True)
+df_scores_filtered_2 = df_scores4.reset_index(drop=True)
 
 from scipy.stats import chi2_contingency
 # create contingency table
-cont_table = pd.crosstab(df_scores_filtered_2["Type d'activité"], df_scores_filtered_2['binstress'])
+cont_table = pd.crosstab(df_scores_filtered_2[option3], df_scores_filtered_2['binstress'])
 
 # perform chi-squared test
 chi2, p, dof, expected = chi2_contingency(cont_table)
@@ -382,6 +597,93 @@ elif p <= 0.1:
     st.write('Tendance')
 else:
     st.write('Relation non significative entre cette variable et le taux d\'hyperstress.')
+
+
+
+
+st.write(" ")
+st.write("#### Motivation")
+st.write(" ")
+
+option5 = st.selectbox(
+    'Which segmentation do you want for KHI Motivation?',
+    ['Direction', 'Site', 'Ancienneté','Contrat','Responsabilité',"Type d'activité","Statut professionnel"])
+
+#list_option6 = list(set(df_final[option5]))
+#option6 = st.selectbox('Which element for KHI Motivation?',list_option6)
+
+
+df_scores5 = df_final.copy()
+df_scores_filtered_3 = df_scores5.reset_index(drop=True)
+#st.dataframe(df_scores_filtered_3)
+from scipy.stats import chi2_contingency
+# create contingency table
+cont_table = pd.crosstab(df_scores_filtered_3[option5], df_scores_filtered_3['gr6blais_new'])
+
+# perform chi-squared test
+chi2, p, dof, expected = chi2_contingency(cont_table)
+
+# print results
+st.write("Chi-squared test statistic:", chi2)
+st.write("p-value:", p)
+st.write("Degrees of freedom:", dof)
+print("Expected frequencies:\n", expected)
+if p <= 0.05:
+    st.write('Relation significative entre cette variable et le taux de motivation.')
+elif p <= 0.1:
+    st.write('Tendance')
+else:
+    st.write('Relation non significative entre cette variable et le taux de motivation.')
+
+
+
+
+
+
+st.write(" ")
+st.write("### Step 08: Specific Questions: ")
+
+
+st.write(" ")
+st.write("##### Q1 - La stratégie de l’entreprise, dans un contexte de baisse structurelle du marché, est clairement définie par la direction")
+q1 = Image.open('images/q1.png')
+st.image(q1, width=800)
+
+st.write(" ")
+st.write("##### Q2 - La communication sur les projets liés à la stratégie de l’entreprise est satisfaisante")
+q2 = Image.open('images/q2.png')
+st.image(q2, width=800)
+
+
+st.write(" ")
+st.write("##### Q3 - Les réunions telles qu'elles sont conduites à MLP (ordre du jour, relevé de décisions, durée, nombre …) sont efficaces")
+q3 = Image.open('images/q3.png')
+st.image(q3, width=800)
+
+
+st.write(" ")
+st.write("##### Q4 - Les critères d'attribution de primes et d’augmentations individuelles sont connus")
+q4 = Image.open('images/q4.png')
+st.image(q4, width=800)
+
+st.write(" ")
+st.write("##### Q5 - Les critères d'accès à la formation sont clairs pour moi")
+q5 = Image.open('images/q5.png')
+st.image(q5, width=800)
+
+st.write(" ")
+st.write("##### Q6 - Je m’exprime librement, sans crainte d’être jugé(e) ou stigmatisé(e)")
+q6 = Image.open('images/q6.png')
+st.image(q6, width=800)
+
+
+st.write(" ")
+st.write("##### Q7 - La mise en œuvre du télétravail est équitable entre les services")
+q7 = Image.open('images/q7.png')
+st.image(q7, width=800)
+
+
+
 
 
 
