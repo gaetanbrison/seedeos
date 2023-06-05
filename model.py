@@ -646,40 +646,40 @@ st.write("### Step 08: Specific Questions: ")
 
 st.write(" ")
 st.write("##### Q1 - La stratégie de l’entreprise, dans un contexte de baisse structurelle du marché, est clairement définie par la direction")
-q1 = Image.open('images/q1.png')
+q1 = Image.open('images/Q1.png')
 st.image(q1, width=800)
 
 st.write(" ")
 st.write("##### Q2 - La communication sur les projets liés à la stratégie de l’entreprise est satisfaisante")
-q2 = Image.open('images/q2.png')
+q2 = Image.open('images/Q2.png')
 st.image(q2, width=800)
 
 
 st.write(" ")
 st.write("##### Q3 - Les réunions telles qu'elles sont conduites à MLP (ordre du jour, relevé de décisions, durée, nombre …) sont efficaces")
-q3 = Image.open('images/q3.png')
+q3 = Image.open('images/Q3.png')
 st.image(q3, width=800)
 
 
 st.write(" ")
 st.write("##### Q4 - Les critères d'attribution de primes et d’augmentations individuelles sont connus")
-q4 = Image.open('images/q4.png')
+q4 = Image.open('images/Q4.png')
 st.image(q4, width=800)
 
 st.write(" ")
 st.write("##### Q5 - Les critères d'accès à la formation sont clairs pour moi")
-q5 = Image.open('images/q5.png')
+q5 = Image.open('images/Q5.png')
 st.image(q5, width=800)
 
 st.write(" ")
 st.write("##### Q6 - Je m’exprime librement, sans crainte d’être jugé(e) ou stigmatisé(e)")
-q6 = Image.open('images/q6.png')
+q6 = Image.open('images/Q6.png')
 st.image(q6, width=800)
 
 
 st.write(" ")
 st.write("##### Q7 - La mise en œuvre du télétravail est équitable entre les services")
-q7 = Image.open('images/q7.png')
+q7 = Image.open('images/Q7.png')
 st.image(q7, width=800)
 
 
